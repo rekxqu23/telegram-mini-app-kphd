@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,23 +12,23 @@
     <div id="results" class="movie-grid"></div>
 </main>
 
-    <footer>
-        <nav class="navbar">
-            <div class="search-bar">
-                <form id="searchForm">
-                    <input type="text" id="query" placeholder="Поиск фильма..." required>
-                    <button type="submit">🔍</button>
-                </form>
-            </div>
-        </nav>
-    </footer>
+<footer>
+    <nav class="navbar">
+        <div class="search-bar">
+            <form id="searchForm">
+                <input type="text" id="query" placeholder="Поиск фильма..." required>
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </nav>
+</footer>
 
-    <!-- index.html -->
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <img id="modal-poster" src="" alt="Постер фильма">
         <h2 id="modal-title"></h2>
+        <p id="modal-rating"></p>
         <p id="modal-genre"></p>
         <p id="modal-duration"></p>
         <p id="modal-country"></p>
@@ -38,15 +37,6 @@
     </div>
 </div>
 
-    <div id="adblockModal" class="modal">
-        <div class="modal-content">
-            <span class="close-adblock">&times;</span>
-            <h2>AdBlock обнаружен!</h2>
-            <p>Чтобы наслаждаться FILMSFY без помех, добавь нас в исключения или отключи блокировщик на время. Мы ad-free, но иногда он блокирует изображения и API.</p>
-            <button id="disableAdblock">Понял, отключу</button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

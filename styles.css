@@ -1,9 +1,8 @@
-/* styles.css */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #121212;
+    background-color: #000000;
     color: #ffffff;
     overflow-y: auto;
     line-height: 1.6;
@@ -15,12 +14,12 @@ body {
 main {
     flex: 1;
     max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 0;
 }
 
 #results {
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 footer {
@@ -61,55 +60,62 @@ footer {
     padding: 10px 15px;
     border: none;
     border-radius: 0 4px 4px 0;
-    background-color: #653b70;
+    background-color: #ff9800;
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .search-bar button:hover {
-    background-color: #ab47bc;
+    background-color: #fb8c00;
 }
 
 .movie-card {
-    background: #1e1e1e;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     display: flex;
-    align-items: flex-start;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.movie-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(106, 27, 154, 0.6);
+    align-items: center;
+    width: 100%;
+    height: 180px;
+    padding: 0;
+    border: none;
+    background-color: #000000;
 }
 
 .movie-card img {
-    max-width: 120px;
+    width: 150px;
+    height: 100%;
+    object-fit: cover;
     margin-right: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    background-color: #1E90FF;
+    position: relative;
+}
+
+.movie-card img::before {
+    content: 'ОДИН ДОМА';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #FFFF00;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #FF0000;
+    font-size: 1.2em;
 }
 
 .movie-info {
     flex: 1;
+    padding: 0 20px;
 }
 
 .movie-info h2 {
-    margin-top: 0;
-    color: #ffffff;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .movie-info p {
-    margin: 5px 0;
-    color: #dddddd;
-    font-size: 1rem;
+    margin: 5px 0 0;
+    color: #CCCCCC;
+    font-size: 1em;
 }
 
 .error {
@@ -139,7 +145,8 @@ footer {
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
-    overflow: hidden;
+    max-height: 80vh;
+    overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     color: #ffffff;
     position: relative;
@@ -157,7 +164,7 @@ footer {
     color: #ffffff;
 }
 
-#modal-genre, #modal-duration, #modal-country {
+#modal-rating, #modal-genre, #modal-duration, #modal-country {
     font-size: 1rem;
     margin: 5px 15px;
     color: #bbbbbb;
@@ -174,7 +181,7 @@ footer {
     width: calc(100% - 30px);
     margin: 0 auto 15px;
     padding: 12px;
-    background-color: #c65a00;
+    background-color: #ff9800;
     border: none;
     border-radius: 30px;
     color: #ffffff;
@@ -184,7 +191,7 @@ footer {
 }
 
 #watchButton:hover {
-    background-color: #e66a00;
+    background-color: #fb8c00;
 }
 
 .close {
@@ -200,32 +207,4 @@ footer {
 
 .close:hover {
     opacity: 1;
-}
-/* Стили для AdBlock модалки */
-#adblockModal .modal-content h2 {
-    color: #d1c4e9;
-    margin-bottom: 10px;
-}
-
-#adblockModal .close-adblock {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#adblockModal .close-adblock:hover {
-    color: #ffffff;
-}
-
-#adblockModal button {
-    background-color: #ff9800;
-    margin-top: 10px;
-}
-
-#adblockModal button:hover {
-    background-color: #f57c00;
 }

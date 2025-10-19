@@ -1,26 +1,11 @@
-// script.js
 const KINOPOISK_API_URL = 'https://kinopoiskapiunofficial.tech/api/';
 const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187';
 
 const form = document.getElementById('searchForm');
 const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('modal');
-const adblockModal = document.getElementById('adblockModal');
-const modalInfo = document.querySelector('.modal-details');
 const watchButton = document.getElementById('watchButton');
 const closeSpan = document.querySelector('.close');
-const closeAdblockSpan = document.querySelector('.close-adblock');
-const disableAdblockBtn = document.getElementById('disableAdblock');
-const modalPosterImg = document.getElementById('modal-poster-img');
-const modalTitle = document.getElementById('modal-title');
-const modalType = document.getElementById('modal-type');
-const modalDirector = document.getElementById('modal-director');
-const modalActors = document.getElementById('modal-actors');
-const modalPlot = document.getElementById('modal-plot');
-const modalRating = document.getElementById('modal-rating');
-const modalGenres = document.getElementById('modal-genres');
-const modalCountry = document.getElementById('modal-country');
-const modalLength = document.getElementById('modal-length');
 
 // Интеграция с Telegram Mini App
 if (window.Telegram && window.Telegram.WebApp) {
@@ -29,35 +14,11 @@ if (window.Telegram && window.Telegram.WebApp) {
     tg.expand();
 }
 
-// Закрытие модалок
+// Закрытие модалки
 closeSpan.addEventListener('click', () => { modal.style.display = 'none'; });
-closeAdblockSpan.addEventListener('click', () => { adblockModal.style.display = 'none'; });
-disableAdblockBtn.addEventListener('click', () => { adblockModal.style.display = 'none'; });
 window.addEventListener('click', (e) => {
     if (e.target === modal) modal.style.display = 'none';
-    if (e.target === adblockModal) adblockModal.style.display = 'none';
 });
-
-// Детектор AdBlock
-let adblockDetected = false;
-function detectAdBlock() {
-    const adElement = document.createElement('div');
-    adElement.innerHTML = '&nbsp;';
-    adElement.className = 'ads adsbox';
-    document.body.appendChild(adElement);
-
-    setTimeout(() => {
-        if (adElement.offsetHeight === 0) {
-            adblockDetected = true;
-            showAdBlockModal();
-        }
-        document.body.removeChild(adElement);
-    }, 3000);
-}
-
-function showAdBlockModal() {
-    adblockModal.style.display = 'block';
-}
 
 async function apiFetch(endpoint) {
     try {
@@ -94,16 +55,15 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-window.addEventListener('load', () => {
-    detectAdBlock();
+window.addEventListener('load', async () => {
+    resultsDiv.innerHTML = '';
+    const data = await apiFetch('v2.2/films/top?type=TOP_250_BEST_FILMS');
+    if (data && data.films) {
+        displaySearchResults(data.films, data.total || 250);
+    }
 });
 
-// script.js
 function displaySearchResults(films, total) {
-    const header = document.createElement('h2');
-    header.textContent = `Фильмы (из ${total} результатов) ${adblockDetected ? '(AdBlock может блокировать изображения)' : ''}`;
-    resultsDiv.appendChild(header);
-
     films.forEach(film => {
         const card = createMovieCard(film);
         card.addEventListener('click', async () => {
@@ -122,11 +82,20 @@ function createMovieCard(film) {
     card.dataset.filmId = film.filmId || film.kinopoiskId;
 
     const img = film.posterUrl && film.posterUrl !== 'N/A' ? `<img src="${film.posterUrl}" alt="${film.nameRu || film.nameEn}">` : '<img src="https://via.placeholder.com/150" alt="No Poster">';
-    const title = film.nameRu || film.nameEn;
+    let title = film.nameRu || film.nameEn;
+    if (title.length > 16) {
+        title = title.substring(0, 16) + '...';
+    }
+    const originalTitle = film.nameEn || film.nameRu;
+    const year = film.year || 'N/A';
+    const genres = film.genres ? film.genres.map(g => g.genre).join(', ') : '';
+    const countries = film.countries ? film.countries.map(c => c.country).join(', ') : '';
 
     const info = `
         <div class="movie-info">
-            <h2>${title}</h2>
+            <h2>${title} (${year})</h2>
+            <p>${originalTitle} (${year})</p>
+            <p>${genres} · ${countries}</p>
         </div>
     `;
 
@@ -141,8 +110,9 @@ async function fetchMovieDetails(filmId) {
 function showModal(movie, filmId) {
     document.getElementById('modal-poster').src = movie.posterUrl || '';
     document.getElementById('modal-title').textContent = `${movie.nameRu || movie.nameOriginal} (${movie.year})`;
+    document.getElementById('modal-rating').textContent = `Рейтинг: ${movie.ratingKinopoisk || ''}`;
     document.getElementById('modal-genre').textContent = `${movie.genres ? movie.genres.map(g => g.genre).join(', ') : ''}`;
-    document.getElementById('modal-duration').textContent = `${"Рейтинг: " + movie.ratingKinopoisk || ''} ${movie.filmLength ? movie.filmLength + ' мин' : ''}`;
+    document.getElementById('modal-duration').textContent = `${movie.filmLength ? movie.filmLength + ' мин' : ''}`;
     document.getElementById('modal-country').textContent = `${movie.countries ? movie.countries.map(c => c.country).join(', ') : ''}`;
     document.getElementById('modal-plot').textContent = movie.description || '';
 
@@ -150,13 +120,7 @@ function showModal(movie, filmId) {
 
     watchButton.onclick = () => {
         let url = `https://www.kinopoisk.one/film/${filmId}/`;
-        if (adblockDetected) {
-            if (confirm('AdBlock может не блокировать рекламу на kinopoisk.one. Открыть всё равно?')) {
-                window.open(url, '_blank');
-            }
-        } else {
-            window.open(url, '_blank');
-        }
+        window.open(url, '_blank');
     };
 }
 
@@ -166,12 +130,3 @@ function showError(message) {
     error.textContent = message;
     resultsDiv.appendChild(error);
 }
-
-window.addEventListener('load', async () => {
-    detectAdBlock();
-    resultsDiv.innerHTML = '';
-    const data = await apiFetch('v2.2/films/top?type=TOP_250_BEST_FILMS');
-    if (data && data.films) {
-        displaySearchResults(data.films, data.total || 250);
-    }
-});
