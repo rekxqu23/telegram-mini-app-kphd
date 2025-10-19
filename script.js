@@ -6,11 +6,21 @@ const form = document.getElementById('searchForm');
 const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('modal');
 const adblockModal = document.getElementById('adblockModal');
-const modalInfo = document.getElementById('modal-info');
+const modalInfo = document.querySelector('.modal-details');
 const watchButton = document.getElementById('watchButton');
 const closeSpan = document.querySelector('.close');
 const closeAdblockSpan = document.querySelector('.close-adblock');
 const disableAdblockBtn = document.getElementById('disableAdblock');
+const modalPosterImg = document.getElementById('modal-poster-img');
+const modalTitle = document.getElementById('modal-title');
+const modalType = document.getElementById('modal-type');
+const modalDirector = document.getElementById('modal-director');
+const modalActors = document.getElementById('modal-actors');
+const modalPlot = document.getElementById('modal-plot');
+const modalRating = document.getElementById('modal-rating');
+const modalGenres = document.getElementById('modal-genres');
+const modalCountry = document.getElementById('modal-country');
+const modalLength = document.getElementById('modal-length');
 
 // Интеграция с Telegram Mini App
 if (window.Telegram && window.Telegram.WebApp) {
@@ -88,6 +98,7 @@ window.addEventListener('load', () => {
     detectAdBlock();
 });
 
+// script.js
 function displaySearchResults(films, total) {
     const header = document.createElement('h2');
     header.textContent = `Фильмы (из ${total} результатов) ${adblockDetected ? '(AdBlock может блокировать изображения)' : ''}`;
@@ -110,20 +121,12 @@ function createMovieCard(film) {
     card.classList.add('movie-card');
     card.dataset.filmId = film.filmId || film.kinopoiskId;
 
-    const img = film.posterUrl && film.posterUrl !== 'N/A' ? `<img src="${film.posterUrl}" alt="${film.nameRu || film.nameEn}">` : '';
-
+    const img = film.posterUrl && film.posterUrl !== 'N/A' ? `<img src="${film.posterUrl}" alt="${film.nameRu || film.nameEn}">` : '<img src="https://via.placeholder.com/150" alt="No Poster">';
     const title = film.nameRu || film.nameEn;
-    const year = film.year || '';
-    const type = film.type || '';
-    const genres = film.genres ? film.genres.map(g => g.genre).join(', ') : 'N/A';
-    const length = film.filmLength ? `${film.filmLength}мин` : 'N/A';
 
     const info = `
         <div class="movie-info">
-            <h2>${title} (${year})</h2>
-            <p><strong>Тип:</strong> ${type}</p>
-            <p><strong>Жанр:</strong> ${genres}</p>
-            <p><strong>Длительность:</strong> ${length}</p>
+            <h2>${title}</h2>
         </div>
     `;
 
@@ -136,21 +139,12 @@ async function fetchMovieDetails(filmId) {
 }
 
 function showModal(movie, filmId) {
-    const genres = movie.genres ? movie.genres.map(g => g.genre).join(', ') : '';
-    const countries = movie.countries ? movie.countries.map(c => c.country).join(', ') : '';
-
-    modalInfo.innerHTML = `
-        <h2>${movie.nameRu || movie.nameOriginal} (${movie.year})</h2>
-        <p><strong>Тип:</strong> ${movie.type}</p>
-        <p><strong>Режиссер:</strong> ${movie.directors ? movie.directors.join(', ') : 'N/A'}</p>
-        <p><strong>Актеры:</strong> ${movie.actors ? movie.actors.join(', ') : 'N/A'}</p>
-        <p><strong>Сюжет:</strong> ${movie.description || 'N/A'}</p>
-        <p><strong>Рейтинг Kinopoisk:</strong> ${movie.ratingKinopoisk || 'N/A'}</p>
-        <p><strong>Жанр:</strong> ${genres}</p>
-        <p><strong>Страна:</strong> ${countries}</p>
-        <p><strong>Длительность:</strong> ${movie.filmLength ? movie.filmLength + 'мин' : 'N/A'}</p>
-        ${adblockDetected ? '<p><em>Совет: AdBlock активен — на внешних сайтах используй приватный режим для ad-free просмотра.</em></p>' : ''}
-    `;
+    document.getElementById('modal-poster').src = movie.posterUrl || '';
+    document.getElementById('modal-title').textContent = `${movie.nameRu || movie.nameOriginal} (${movie.year})`;
+    document.getElementById('modal-genre').textContent = `${movie.genres ? movie.genres.map(g => g.genre).join(', ') : ''}`;
+    document.getElementById('modal-duration').textContent = `${"Рейтинг: " + movie.ratingKinopoisk || ''} ${movie.filmLength ? movie.filmLength + ' мин' : ''}`;
+    document.getElementById('modal-country').textContent = `${movie.countries ? movie.countries.map(c => c.country).join(', ') : ''}`;
+    document.getElementById('modal-plot').textContent = movie.description || '';
 
     modal.style.display = 'block';
 
@@ -172,3 +166,12 @@ function showError(message) {
     error.textContent = message;
     resultsDiv.appendChild(error);
 }
+
+window.addEventListener('load', async () => {
+    detectAdBlock();
+    resultsDiv.innerHTML = '';
+    const data = await apiFetch('v2.2/films/top?type=TOP_250_BEST_FILMS');
+    if (data && data.films) {
+        displaySearchResults(data.films, data.total || 250);
+    }
+});

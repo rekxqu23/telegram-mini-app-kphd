@@ -9,9 +9,9 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <main>
-        <div id="results"></div>
-    </main>
+<main>
+    <div id="results" class="movie-grid"></div>
+</main>
 
     <footer>
         <nav class="navbar">
@@ -24,13 +24,19 @@
         </nav>
     </footer>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modal-info"></div>
-            <button id="watchButton">Смотреть</button>
-        </div>
+    <!-- index.html -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modal-poster" src="" alt="Постер фильма">
+        <h2 id="modal-title"></h2>
+        <p id="modal-genre"></p>
+        <p id="modal-duration"></p>
+        <p id="modal-country"></p>
+        <p id="modal-plot"></p>
+        <button id="watchButton">Смотреть</button>
     </div>
+</div>
 
     <div id="adblockModal" class="modal">
         <div class="modal-content">
