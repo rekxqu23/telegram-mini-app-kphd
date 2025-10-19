@@ -4,19 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Парсер фильмов с Kinopoisk API</title>
+    <title>FILMSFY</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <h1>Парсер информации о фильмах</h1>
-    <form id="searchForm">
-        <label for="query">Название фильма:</label>
-        <input type="text" id="query" placeholder="Введите название фильма" required>
-        <button type="submit">Искать</button>
-    </form>
-
-    <div id="results"></div>
+    <header>
+        <nav class="navbar">
+            <div class="logo">FILMSFY</div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active">Главная</a></li>
+                <li><a href="#" class="nav-link">Фильмы</a></li>
+                <li><a href="#" class="nav-link">Случайный</a></li>
+                <li><a href="#" class="nav-link">О нас</a></li>
+            </ul>
+            <div class="search-bar">
+                <form id="searchForm">
+                    <input type="text" id="query" placeholder="Поиск фильма..." required>
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div id="results"></div>
+    </main>
 
     <div id="modal" class="modal">
         <div class="modal-content">

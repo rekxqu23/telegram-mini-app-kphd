@@ -1,57 +1,97 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    max-width: 100%;
+    font-family: 'Arial', sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     background-color: #121212;
     color: #ffffff;
     overflow-y: auto;
+    line-height: 1.6;
 }
 
-h1 {
-    text-align: center;
-    color: #ffffff;
+header {
+    background: linear-gradient(135deg, #6a1b9a, #4a0072);
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-form {
-    background: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    flex-wrap: wrap;
 }
 
-label {
-    display: block;
-    margin-bottom: 10px;
+.logo {
+    font-size: 2rem;
     font-weight: bold;
     color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-input[type="text"] {
-    width: 100%;
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    margin: 0 15px;
+}
+
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #d1c4e9;
+}
+
+.search-bar form {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input[type="text"] {
     padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #333;
-    border-radius: 4px;
+    border: none;
+    border-radius: 4px 0 0 4px;
     background-color: #2a2a2a;
     color: #ffffff;
+    outline: none;
+    width: 200px;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #6a1b9a; /* Фиолетовый акцент */
-    color: #ffffff;
+.search-bar button {
+    padding: 10px 15px;
     border: none;
-    border-radius: 4px;
+    border-radius: 0 4px 4px 0;
+    background-color: #8e24aa;
+    color: #ffffff;
     cursor: pointer;
-    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #8e24aa;
+.search-bar button:hover {
+    background-color: #ab47bc;
+}
+
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
 }
 
 #results {
@@ -67,10 +107,12 @@ button:hover {
     display: flex;
     align-items: flex-start;
     cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .movie-card:hover {
-    background: #252525;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(106, 27, 154, 0.5);
 }
 
 .movie-card img {
@@ -86,6 +128,7 @@ button:hover {
 .movie-info h2 {
     margin-top: 0;
     color: #ffffff;
+    font-size: 1.5rem;
 }
 
 .movie-info p {
@@ -103,13 +146,13 @@ button:hover {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1001;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0,0,0,0.7);
     padding-top: 60px;
 }
 
@@ -117,28 +160,42 @@ button:hover {
     background-color: #1e1e1e;
     margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border-radius: 10px;
     width: 80%;
     max-width: 600px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
     color: #ffffff;
+    position: relative;
 }
 
 .close {
     color: #aaa;
-    float: right;
+    position: absolute;
+    top: 10px;
+    right: 20px;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
     color: #ffffff;
     text-decoration: none;
-    cursor: pointer;
 }
 
 #watchButton {
     margin-top: 20px;
+    padding: 10px;
+    background-color: #8e24aa;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+}
+
+#watchButton:hover {
+    background-color: #ab47bc;
 }

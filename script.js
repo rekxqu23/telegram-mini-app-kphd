@@ -1,6 +1,6 @@
 // script.js
 const KINOPOISK_API_URL = 'https://kinopoiskapiunofficial.tech/api/';
-const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187'; // Вставьте свой API ключ здесь. Получите на https://kinopoiskapiunofficial.tech
+const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187';
 
 const form = document.getElementById('searchForm');
 const resultsDiv = document.getElementById('results');
@@ -28,11 +28,6 @@ window.addEventListener('click', (e) => {
 });
 
 async function apiFetch(endpoint) {
-    if (!KINOPOISK_API_KEY) {
-        showError('API ключ для Kinopoisk не указан. Пожалуйста, вставьте его в script.js');
-        return null;
-    }
-
     try {
         const response = await fetch(`${KINOPOISK_API_URL}${endpoint}`, {
             method: 'GET',
@@ -67,7 +62,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// Автоматический показ топ фильмов при загрузке (как замена случайным)
+// Автоматический показ топ фильмов при загрузке
 window.addEventListener('load', async () => {
     resultsDiv.innerHTML = '';
     const randomPage = Math.floor(Math.random() * 13) + 1; // Топ 250, по 20 на страницу ~13 страниц
@@ -99,7 +94,7 @@ function createMovieCard(film) {
     card.classList.add('movie-card');
     card.dataset.filmId = film.filmId || film.kinopoiskId;
 
-    const img = film.posterUrl !== 'N/A' && film.posterUrl ? `<img src="${film.posterUrl}" alt="${film.nameRu || film.nameEn}">` : '';
+    const img = film.posterUrl && film.posterUrl !== 'N/A' ? `<img src="${film.posterUrl}" alt="${film.nameRu || film.nameEn}">` : '';
 
     const title = film.nameRu || film.nameEn;
     const year = film.year || '';
