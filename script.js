@@ -1,4 +1,4 @@
-// script.js (обновлённый; добавлен детектор и обработка) 
+// script.js
 const KINOPOISK_API_URL = 'https://kinopoiskapiunofficial.tech/api/';
 const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187';
 
@@ -128,11 +128,15 @@ function createMovieCard(film) {
     const title = film.nameRu || film.nameEn;
     const year = film.year || '';
     const type = film.type || '';
+    const genres = film.genres ? film.genres.map(g => g.genre).join(', ') : 'N/A';
+    const length = film.filmLength ? `${film.filmLength} мин` : 'N/A';
 
     const info = `
         <div class="movie-info">
             <h2>${title} (${year})</h2>
             <p><strong>Тип:</strong> ${type}</p>
+            <p><strong>Жанр:</strong> ${genres}</p>
+            <p><strong>Длительность:</strong> ${length}</p>
         </div>
     `;
 
