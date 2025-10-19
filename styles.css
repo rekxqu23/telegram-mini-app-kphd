@@ -7,61 +7,44 @@ body {
     color: #ffffff;
     overflow-y: auto;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-header {
-    background: linear-gradient(135deg, #6a1b9a, #4a0072);
+main {
+    flex: 1;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+#results {
+    margin-top: 30px;
+}
+
+footer {
+    background-color: #1f1f1f;
     padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
     position: sticky;
-    top: 0;
+    bottom: 0;
     z-index: 1000;
 }
 
 .navbar {
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 0 20px;
-    flex-wrap: wrap;
-}
-
-.logo {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffffff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-.nav-menu {
-    list-style: none;
     display: flex;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-menu li {
-    margin: 0 15px;
-}
-
-.nav-link {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    transition: color 0.3s ease;
-}
-
-.nav-link:hover,
-.nav-link.active {
-    color: #d1c4e9;
+    justify-content: center;
 }
 
 .search-bar form {
     display: flex;
     align-items: center;
+    width: 100%;
+    max-width: 400px;
 }
 
 .search-bar input[type="text"] {
@@ -71,14 +54,14 @@ header {
     background-color: #2a2a2a;
     color: #ffffff;
     outline: none;
-    width: 200px;
+    flex: 1;
 }
 
 .search-bar button {
     padding: 10px 15px;
     border: none;
     border-radius: 0 4px 4px 0;
-    background-color: #8e24aa;
+    background-color: #653b70;
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -86,16 +69,6 @@ header {
 
 .search-bar button:hover {
     background-color: #ab47bc;
-}
-
-main {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-#results {
-    margin-top: 30px;
 }
 
 .movie-card {
@@ -242,7 +215,7 @@ main {
 }
 
 #adblockModal button {
-    background-color: #ff9800; /* Оранжевый для акцента */
+    background-color: #ff9800;
     margin-top: 10px;
 }
 
