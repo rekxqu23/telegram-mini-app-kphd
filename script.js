@@ -1,13 +1,16 @@
-// script.js
+// script.js (обновлённый; добавлен детектор и обработка) 
 const KINOPOISK_API_URL = 'https://kinopoiskapiunofficial.tech/api/';
 const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187';
 
 const form = document.getElementById('searchForm');
 const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('modal');
+const adblockModal = document.getElementById('adblockModal');
 const modalInfo = document.getElementById('modal-info');
 const watchButton = document.getElementById('watchButton');
 const closeSpan = document.querySelector('.close');
+const closeAdblockSpan = document.querySelector('.close-adblock');
+const disableAdblockBtn = document.getElementById('disableAdblock');
 
 // Интеграция с Telegram Mini App
 if (window.Telegram && window.Telegram.WebApp) {
@@ -16,17 +19,40 @@ if (window.Telegram && window.Telegram.WebApp) {
     tg.expand();
 }
 
-// Закрытие модалки
-closeSpan.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
-
+// Закрытие модалок
+closeSpan.addEventListener('click', () => { modal.style.display = 'none'; });
+closeAdblockSpan.addEventListener('click', () => { adblockModal.style.display = 'none'; });
+disableAdblockBtn.addEventListener('click', () => { adblockModal.style.display = 'none'; });
 window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-    }
+    if (e.target === modal) modal.style.display = 'none';
+    if (e.target === adblockModal) adblockModal.style.display = 'none';
 });
 
+// Детектор AdBlock (простой и эффективный метод)
+let adblockDetected = false;
+function detectAdBlock() {
+    // Создаём "приманку" — пустой div, который AdBlock может заблокировать
+    const adElement = document.createElement('div');
+    adElement.innerHTML = '&nbsp;'; // Пустой, чтобы не влиять на UX
+    adElement.className = 'ads adsbox'; // Типичный класс для ads
+    document.body.appendChild(adElement);
+
+    // Проверяем через 3 сек, заблокирован ли (если высота 0 — заблокирован)
+    setTimeout(() => {
+        if (adElement.offsetHeight === 0) {
+            adblockDetected = true;
+            showAdBlockModal();
+        }
+        document.body.removeChild(adElement); // Удаляем приманку
+    }, 3000);
+}
+
+// Показ модалки AdBlock
+function showAdBlockModal() {
+    adblockModal.style.display = 'block';
+}
+
+// API fetch (без изменений)
 async function apiFetch(endpoint) {
     try {
         const response = await fetch(`${KINOPOISK_API_URL}${endpoint}`, {
@@ -46,6 +72,7 @@ async function apiFetch(endpoint) {
     }
 }
 
+// Поиск по форме (без изменений)
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     resultsDiv.innerHTML = '';
@@ -62,19 +89,21 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// Автоматический показ топ фильмов при загрузке
+// Автозагрузка топа + детектор при load
 window.addEventListener('load', async () => {
+    detectAdBlock(); // Запуск детектора сразу
     resultsDiv.innerHTML = '';
-    const randomPage = Math.floor(Math.random() * 13) + 1; // Топ 250, по 20 на страницу ~13 страниц
+    const randomPage = Math.floor(Math.random() * 13) + 1;
     const data = await apiFetch(`v2.2/films/top?type=TOP_250_BEST_FILMS&page=${randomPage}`);
     if (data && data.items) {
-        displaySearchResults(data.items, 250); // Общее примерно 250
+        displaySearchResults(data.items, 250);
     }
 });
 
+// Отображение результатов (добавлено предупреждение в watchButton, если AdBlock)
 function displaySearchResults(films, total) {
     const header = document.createElement('h2');
-    header.textContent = `Фильмы (из ${total} результатов)`;
+    header.textContent = `Фильмы (из ${total} результатов) ${adblockDetected ? '(AdBlock может блокировать изображения)' : ''}`;
     resultsDiv.appendChild(header);
 
     films.forEach(film => {
@@ -129,12 +158,21 @@ function showModal(movie, filmId) {
         <p><strong>Жанр:</strong> ${genres}</p>
         <p><strong>Страна:</strong> ${countries}</p>
         <p><strong>Длительность:</strong> ${movie.filmLength ? movie.filmLength + ' мин' : 'N/A'}</p>
+        ${adblockDetected ? '<p><em>Совет: AdBlock активен — на внешних сайтах используй приватный режим для ad-free просмотра.</em></p>' : ''}
     `;
 
     modal.style.display = 'block';
 
     watchButton.onclick = () => {
-        window.open(`https://www.kinopoisk.one/film/${filmId}/`, '_blank');
+        let url = `https://www.kinopoisk.one/film/${filmId}/`;
+        if (adblockDetected) {
+            // Если AdBlock, предложи открыть в новой вкладке с предупреждением
+            if (confirm('AdBlock может не блокировать рекламу на kinopoisk.one. Открыть всё равно?')) {
+                window.open(url, '_blank');
+            }
+        } else {
+            window.open(url, '_blank');
+        }
     };
 }
 

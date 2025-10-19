@@ -199,3 +199,31 @@ main {
 #watchButton:hover {
     background-color: #ab47bc;
 }
+
+#adblockModal .modal-content h2 {
+    color: #d1c4e9;
+    margin-bottom: 10px;
+}
+
+#adblockModal .close-adblock {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#adblockModal .close-adblock:hover {
+    color: #ffffff;
+}
+
+#adblockModal button {
+    background-color: #ff9800; /* Оранжевый для акцента */
+    margin-top: 10px;
+}
+
+#adblockModal button:hover {
+    background-color: #f57c00;
+}
