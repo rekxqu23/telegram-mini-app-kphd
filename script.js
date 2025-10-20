@@ -1,11 +1,18 @@
 const KINOPOISK_API_URL = 'https://kinopoiskapiunofficial.tech/api/';
 const KINOPOISK_API_KEY = '7d4f6438-9c0e-465b-98d2-064339194187';
 
-const form = document.getElementById('searchForm');
+const queryInput = document.getElementById('query');
 const resultsDiv = document.getElementById('results');
 const modal = document.getElementById('modal');
 const watchButton = document.getElementById('watchButton');
 const closeSpan = document.querySelector('.close');
+
+let currentPage = 1;
+let isLoading = false;
+let totalPages = Infinity;
+let searchQuery = '';
+
+const ITEMS_PER_PAGE = 20;
 
 // Интеграция с Telegram Mini App
 if (window.Telegram && window.Telegram.WebApp) {
@@ -39,29 +46,40 @@ async function apiFetch(endpoint) {
     }
 }
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    resultsDiv.innerHTML = '';
-    const query = document.getElementById('query').value.trim();
-
-    if (!query) {
-        showError('Введите название фильма');
-        return;
-    }
-
-    const data = await apiFetch(`v2.1/films/search-by-keyword?keyword=${encodeURIComponent(query)}`);
-    if (data && data.films) {
-        displaySearchResults(data.films, data.searchFilmsCountResult);
+// Поиск по нажатию Enter
+queryInput.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        searchQuery = queryInput.value.trim();
+        currentPage = 1;
+        resultsDiv.innerHTML = '';
+        isLoading = true;
+        await loadMoreFilms();
+        isLoading = false;
     }
 });
 
-window.addEventListener('load', async () => {
-    resultsDiv.innerHTML = '';
-    const data = await apiFetch('v2.2/films/top?type=TOP_250_BEST_FILMS');
-    if (data && data.films) {
-        displaySearchResults(data.films, data.total || 250);
+async function loadMoreFilms() {
+    if (isLoading || currentPage > totalPages) return;
+
+    isLoading = true;
+    let endpoint = searchQuery
+        ? `v2.1/films/search-by-keyword?keyword=${encodeURIComponent(searchQuery)}&page=${currentPage}`
+        : `v2.2/films/top?type=TOP_250_BEST_FILMS&page=${currentPage}`;
+
+    const data = await apiFetch(endpoint);
+    if (data) {
+        if (searchQuery) {
+            totalPages = Math.ceil(data.searchFilmsCountResult / ITEMS_PER_PAGE) || 1;
+            displaySearchResults(data.films, data.searchFilmsCountResult);
+        } else {
+            totalPages = Math.ceil(250 / ITEMS_PER_PAGE) || 1; // Предполагаем 250 фильмов в топе
+            displaySearchResults(data.films.slice(0, ITEMS_PER_PAGE), 250);
+        }
+        currentPage++;
     }
-});
+    isLoading = false;
+}
 
 function displaySearchResults(films, total) {
     films.forEach(film => {
@@ -75,6 +93,17 @@ function displaySearchResults(films, total) {
         resultsDiv.appendChild(card);
     });
 }
+
+// Бесконечная прокрутка
+window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200 && !isLoading) {
+        loadMoreFilms();
+    }
+});
+
+window.addEventListener('load', async () => {
+    await loadMoreFilms();
+});
 
 function createMovieCard(film) {
     const card = document.createElement('div');
