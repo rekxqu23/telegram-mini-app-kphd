@@ -16,11 +16,22 @@ main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0;
+    position: relative;
+}
+
+#loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    color: #ffffff;
 }
 
 #results {
     margin-top: 0;
-    padding-bottom: 20px; /* Дополнительное место для прокрутки */
+    padding-bottom: 20px;
 }
 
 footer {
@@ -37,8 +48,8 @@ footer {
     padding: 0 20px;
     display: flex;
     align-items: center;
-    justify-content: center; /* Выравнивание по центру */
-    gap: 12px; /* Расстояние 12px между элементами */
+    justify-content: center;
+    gap: 12px;
 }
 
 #query {
@@ -161,7 +172,7 @@ footer {
 .modal-content {
     background-color: #000000;
     margin: auto;
-    padding: 0;
+    padding: 20px;
     border-radius: 20px;
     width: 90%;
     max-width: 400px;
@@ -170,6 +181,47 @@ footer {
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     color: #ffffff;
     position: relative;
+}
+
+.genre-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.genre-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.genre-btn.active {
+    background: linear-gradient(90deg, #FCEF91 0%, #FB9E3A 48%, #E6521F 100%);
+}
+
+.genre-btn:hover {
+    background-color: #2c2c2c;
+}
+
+.close, .close-genre, .close-menu {
+    color: #ffffff;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.close:hover, .close-genre:hover, .close-menu:hover {
+    opacity: 1;
 }
 
 #modal-poster {
@@ -214,17 +266,77 @@ footer {
     background-color: #fb8c00;
 }
 
-.close {
-    color: #ffffff;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-    opacity: 0.7;
+/* Menu Modal Styles */
+#menu-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
-.close:hover {
-    opacity: 1;
+.tab-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 15px;
+    background-color: #1c1c1c;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tab-btn.active {
+    background: linear-gradient(90deg, #FCEF91 0%, #FB9E3A 48%, #E6521F 100%);
+}
+
+.tab-btn:hover {
+    background-color: #2c2c2c;
+}
+
+#tab-content {
+    margin-top: 10px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+#watching-list, #favorites-list {
+    list-style: none;
+    padding: 0;
+}
+
+#watching-list li, #favorites-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+}
+
+#watching-list li img, #favorites-list li img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+#watching-list li button, #favorites-list li button {
+    padding: 5px 10px;
+    background-color: #ff4444;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#watching-list li button:hover, #favorites-list li button:hover {
+    background-color: #cc0000;
+}
+
+.watching-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
